@@ -20,6 +20,8 @@ The service listens on `http://localhost:5080`. In a second terminal, send it so
 dotnet run --project src/WeatherStations.Client -- --count 1000
 ```
 
+No configuration is needed for these commands. `dotnet run` starts the service in the `Development` environment, where the API key is `dev-only-key`, and the client sends that same key by default.
+
 ## API key
 
 Every request must send the key in the `X-Api-Key` header. A request without it, or with the wrong one, gets `401`. This includes requests to routes that do not exist.
@@ -40,6 +42,15 @@ dotnet run --project src/WeatherStations.Api -- --Authentication:ApiKey=my-secre
 In the `Development` environment, `appsettings.Development.json` sets the key to `dev-only-key` so that `dotnet run` works without any setup. It is not a secret. In every other environment there is no default, and the service refuses to start until a key is configured.
 
 The client takes the key from `--api-key`, then from the `WEATHER_API_KEY` environment variable, and falls back to `dev-only-key`.
+
+To run both with a key of your own:
+
+```bash
+dotnet run --project src/WeatherStations.Api -- --Authentication:ApiKey=my-secret-key
+dotnet run --project src/WeatherStations.Client -- --count 1000 --api-key my-secret-key
+```
+
+Once a key is set this way, `dev-only-key` is no longer accepted.
 
 The key travels in a header, so a real deployment needs TLS, normally terminated at the gateway in front of the service.
 
