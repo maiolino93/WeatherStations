@@ -52,6 +52,16 @@ dotnet run --project src/WeatherStations.Client -- --count 1000 --api-key my-sec
 
 Once a key is set this way, `dev-only-key` is no longer accepted.
 
+Any non-empty text works as a key, and it has to match exactly, including upper and lower case. As a suggestion, use a long random value rather than a word that could be guessed. One way to generate it:
+
+```bash
+# PowerShell
+[guid]::NewGuid().ToString("N")
+
+# bash
+openssl rand -hex 32
+```
+
 The key travels in a header, so a real deployment needs TLS, normally terminated at the gateway in front of the service.
 
 ## Using the service
